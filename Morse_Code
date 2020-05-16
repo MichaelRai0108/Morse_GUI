@@ -1,0 +1,50 @@
+from gpiozero import LED
+import RPi.GPIO
+from time import sleep
+from guizero import App, Text, TextBox, PushButton
+RPi.GPIO.setmode(RPi.GPIO.BCM)
+
+##hardware
+
+led_red = LED(18)
+
+
+MORSE_CODE_DICTIONARY = { ' ':'/', 'A':'.-', 'B':'-...', 'C':'-.-.', 'D':'-..', 'E':'.', 'F':'..-.', 'G':'--.', 'H':'....',
+                    'I':'..', 'J':'.---', 'K':'-.-', 'L':'.-..', 'M':'--', 'N':'-.','O':'---', 'P':'.--.', 'Q':'--.-',
+                    'R':'.-.', 'S':'...', 'T':'-','U':'..-', 'V':'...-', 'W':'.--','X':'-..-', 'Y':'-.--', 'Z':'--..'}
+
+
+
+def MorseCode():
+    text=name.value
+    txt = text[0:12]
+    code = [MORSE_CODE_DICTIONARY[i.upper()] + ' ' for i in txt if i.upper() in MORSE_CODE_DICTIONARY.keys()]
+    morse=''.join(code)
+    print(morse)
+    for m in morse:
+        if m=='.':
+            led_red.on()  
+            sleep(1)
+            led_red.off()
+            sleep(1)
+            
+            
+        elif m=='-':
+            led_red.on() 
+            sleep(2)
+            led_red.off()
+            sleep(1)
+            
+        else:
+            sleep(2)
+            
+            
+            
+action = App(title = "Morse Code Converter")
+introduction = Text(action, text="Enter a word to convert(Less than 13 letters:)")
+name = TextBox(action,width =12)
+
+
+txt = PushButton(action, command = MorseCode,text = "Submit")
+action.display()
+
